@@ -2,24 +2,52 @@
 
 #fname = 'example.txt'
 fname = 'input1.txt'
+
+# PARSE file header for crate positions and populate dictionary
 fp = open(fname, 'r')
+spaces = 0
+eof = False
+numlines = 0
+innerlist = []
+listDict = {}
+state = {}
 
-# SUPER CHEESECHEAT SHIT - write a friggin parser!
-stack1 = ['F', 'L', 'M', 'W']
-stack2 = ['F', 'M', 'V', 'Z', 'B']
-stack3 = ['Q', 'L', 'S', 'R', 'V', 'H']
-stack4 = ['J', 'T', 'M', 'P', 'Q', 'V', 'S', 'F']
-stack5 = ['W', 'S', 'L']
-stack6 = ['W', 'J', 'R', 'M', 'P', 'V', 'F']
-stack7 = ['F', 'R', 'N', 'P', 'C', 'Q', 'J']
-stack8 = ['B', 'R', 'W', 'Z', 'S', 'P', 'H', 'V']
-stack9 = ['W', 'Z', 'H', 'G', 'C', 'J', 'M', 'B']
+for line in fp:
+    numlines += 1
+    for char in line.rstrip():
+        if char == '1':     # Indicates end of header / crate position info
+            eof = True
+            break
+        if char == ' ':
+            # count number of spaces
+            spaces += 1
+        if char != '[' and char != ']' and char != ' ':
+            while spaces >= 4:  # Account for spaces inbetween crate stacks
+                innerlist.append(' ')
+                spaces -= 4
+            innerlist.append(char)
+            spaces = 0
+    if eof:
+        break
+    listDict[numlines] = innerlist.copy()
+    innerlist.clear()
+    spaces = 0
 
-data = fp.read().splitlines()[10:]  # Jump past the crate positional info. More cheese?
+print(f'parsed {numlines-1} lines')
+# So now there is a dictionary with keys representing rows and a list of the entries on that row
+# Need to transpose to state dictionary showing the crates in their proper columns
 
-state = {1: stack1, 2: stack2, 3: stack3, 4: stack4, 5: stack5, 6: stack6, 7: stack7, 8: stack8, 9: stack9}
+localList = []
+for x in range(numlines):
+    for y in range(1, numlines):
+        if listDict[y][x] != ' ':
+            localList.append(listDict[y][x])
+    state[x+1] = localList.copy()
+    localList.clear()
+print(f'State dictionary created.\n---------------\nStarting crane ops')
 
-for line in data:
+fp.readline()   # flush empty line
+for line in fp:
     qty = int(line.split(" ")[1])
     fstack = int(line.split(" ")[3])
     tstack = int(line.split(" ")[5])
@@ -36,5 +64,3 @@ for j in state.items():
 fp.close()
 
 print(f'End state : {endposition}')
-
-
