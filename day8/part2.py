@@ -15,28 +15,24 @@ def print_left(grid, x, y):
     for a in range(y, -1, -1):
         print(f'{grid[x][a]}', end='')
     print(f'\n')
-    #print(f'Clear = {check_left(grid, x, y)}')
 
 
 def print_right(grid, x, y):
     for a in range(y, len(grid[0])):
         print(f'{grid[x][a]}', end='')
     print()
-    #print(f'Clear = {check_right(grid, x, y)}')
 
 
 def print_up(grid, x, y):
     for a in range(x, -1, -1):
         print(f'{grid[a][y]}', end='')
     print()
-    #print(f'Clear = {check_up(grid, x, y)}')
 
 
 def print_down(grid, x, y):
     for a in range(x, len(grid)):
         print(f'{grid[a][y]}', end='')
     print()
-    #print(f'Clear = {check_down(grid, x, y)}')
 
 
 def print_all(grid, x, y):
