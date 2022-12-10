@@ -11,15 +11,11 @@ mod = 40  # modulo thing
 
 
 def raster(clock, sprite):
-    if sprite - 1 <= clock <= sprite + 1:
-        print('#', end='')
-    else:
-        print('.', end='')
+    print('#', end='') if sprite - 1 <= clock <= sprite + 1 else print(' ', end='')
 
 
 fp = open(fname, 'r')
 data = fp.read().splitlines()
-
 
 print('0123456789012345678901234567890123456789')
 for ins in data:
